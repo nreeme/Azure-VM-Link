@@ -1,0 +1,180 @@
+{
+  "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Resources/deployments/CreateVm-canonical.0001-com-ubuntu-server-focal-2-20220908144723",
+  "name": "CreateVm-canonical.0001-com-ubuntu-server-focal-2-20220908144723",
+  "type": "Microsoft.Resources/deployments",
+  "tags": {
+    "primaryResourceId": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourcegroups/ProjectVm_group/providers/Microsoft.Compute/virtualMachines/VMSandbox",
+    "marketplaceItemId": "Microsoft.VirtualMachine",
+    "provisioningHash": "SolutionProvider"
+  },
+  "properties": {
+    "templateHash": "15573442131753090909",
+    "parameters": {
+      "location": {
+        "type": "String",
+        "value": "westus3"
+      },
+      "networkInterfaceName": {
+        "type": "String",
+        "value": "vmsandbox389"
+      },
+      "networkSecurityGroupName": {
+        "type": "String",
+        "value": "VMSandbox-nsg"
+      },
+      "networkSecurityGroupRules": {
+        "type": "Array",
+        "value": [
+          {
+            "name": "SSH",
+            "properties": {
+              "priority": 300,
+              "protocol": "TCP",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "22"
+            }
+          }
+        ]
+      },
+      "subnetName": {
+        "type": "String",
+        "value": "default"
+      },
+      "virtualNetworkId": {
+        "type": "String",
+        "value": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Network/virtualNetworks/ProjectVm_group-vnet"
+      },
+      "publicIpAddressName": {
+        "type": "String",
+        "value": "VMSandbox-ip"
+      },
+      "publicIpAddressType": {
+        "type": "String",
+        "value": "Static"
+      },
+      "publicIpAddressSku": {
+        "type": "String",
+        "value": "Standard"
+      },
+      "pipDeleteOption": {
+        "type": "String",
+        "value": "Detach"
+      },
+      "virtualMachineName": {
+        "type": "String",
+        "value": "VMSandbox"
+      },
+      "virtualMachineComputerName": {
+        "type": "String",
+        "value": "VMSandbox"
+      },
+      "virtualMachineRG": {
+        "type": "String",
+        "value": "ProjectVm_group"
+      },
+      "osDiskType": {
+        "type": "String",
+        "value": "StandardSSD_LRS"
+      },
+      "osDiskDeleteOption": {
+        "type": "String",
+        "value": "Delete"
+      },
+      "virtualMachineSize": {
+        "type": "String",
+        "value": "Standard_D2s_v3"
+      },
+      "nicDeleteOption": {
+        "type": "String",
+        "value": "Detach"
+      },
+      "adminUsername": {
+        "type": "String",
+        "value": "azureuser"
+      },
+      "adminPassword": {
+        "type": "SecureString"
+      }
+    },
+    "mode": "Incremental",
+    "debugSetting": {
+      "detailLevel": "None"
+    },
+    "provisioningState": "Running",
+    "timestamp": "2022-09-08T20:49:52.2481059Z",
+    "duration": "PT2.2907682S",
+    "correlationId": "9e319a6f-d1fb-48c2-861b-1904f490430a",
+    "providers": [
+      {
+        "namespace": "Microsoft.Network",
+        "resourceTypes": [
+          {
+            "resourceType": "networkInterfaces",
+            "locations": [
+              "westus3"
+            ]
+          },
+          {
+            "resourceType": "networkSecurityGroups",
+            "locations": [
+              "westus3"
+            ]
+          },
+          {
+            "resourceType": "publicIpAddresses",
+            "locations": [
+              "westus3"
+            ]
+          }
+        ]
+      },
+      {
+        "namespace": "Microsoft.Compute",
+        "resourceTypes": [
+          {
+            "resourceType": "virtualMachines",
+            "locations": [
+              "westus3"
+            ]
+          }
+        ]
+      }
+    ],
+    "dependencies": [
+      {
+        "dependsOn": [
+          {
+            "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Network/networkSecurityGroups/VMSandbox-nsg",
+            "resourceType": "Microsoft.Network/networkSecurityGroups",
+            "resourceName": "VMSandbox-nsg"
+          },
+          {
+            "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Network/publicIpAddresses/VMSandbox-ip",
+            "resourceType": "Microsoft.Network/publicIpAddresses",
+            "resourceName": "VMSandbox-ip"
+          }
+        ],
+        "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Network/networkInterfaces/vmsandbox389",
+        "resourceType": "Microsoft.Network/networkInterfaces",
+        "resourceName": "vmsandbox389"
+      },
+      {
+        "dependsOn": [
+          {
+            "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Network/networkInterfaces/vmsandbox389",
+            "resourceType": "Microsoft.Network/networkInterfaces",
+            "resourceName": "vmsandbox389"
+          }
+        ],
+        "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/ProjectVm_group/providers/Microsoft.Compute/virtualMachines/VMSandbox",
+        "resourceType": "Microsoft.Compute/virtualMachines",
+        "resourceName": "VMSandbox"
+      }
+    ],
+    "validationLevel": "Template"
+  }
+}
