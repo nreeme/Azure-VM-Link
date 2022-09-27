@@ -7,46 +7,46 @@ $NetworkAddrs = "10.0.0.0"
 
 class resource {
     [string]$location
-    [array[]]$resourceGroup
-    [array[]]$networkSecurityGroup
-    [array[]]$virtualNetwork
-    [array[]]$publicIP
-    [array[]]$networkInterface
-    [array[]]$vmDisk
+    [object]$resourceGroup
+    [object]$networkSecurityGroup
+    [object]$virtualNetwork
+    [object]$publicIP
+    [object]$networkInterface
+    [object]$vmDisk
     hidden [object] $tempWorkSpace
     resource($name, $location, $IPSPACE, $obsValue) {
-        $this.tempWorkSpace = @{"hiddenValue" = $obsValue }
+        $this.tempWorkSpace = [PSCustomObject][ordered]@{"hiddenValue" = $obsValue }
         $this.location = $location
-        $this.resourceGroup = @{
-            "Name"   = "($name)ResourceGroup"
-            "Return" = @{}
+        $this.resourceGroup = [PSCustomObject][ordered]@{
+            "Name"   = "$($name)ResourceGroup"
+            "Return" = [PSCustomObject][ordered]@{}
         }
-        $this.networkSecurityGroup = @{
+        $this.networkSecurityGroup = [PSCustomObject][ordered]@{
             "name"          = "$($name)Security"
-            "resourceGroup" = "($name)ResourceGroup"
-            "return"        = @{}
+            "resourceGroup" = "$($name)ResourceGroup"
+            "return"        = [PSCustomObject][ordered]@{}
         }
-        $this.virtualNetwork = @{ 
+        $this.virtualNetwork = [PSCustomObject][ordered]@{ 
             "name"          = "$($name)Vnet" 
             "addressPrefix" = "$($IPSPACE)/16" 
             "subnetName"    = "$($name)Subnet"
             "subnetPrefix"  = "$($IPSPACE)/24"
-            "return"        = @{}
+            "return"        = [PSCustomObject][ordered]@{}
         }
-        $this.publicIP = @{
+        $this.publicIP = [PSCustomObject][ordered]@{
             "name"          = "$($name)PublicIp"
             "resourceGroup" = "$($name)ResourceGroup"
-            "return"        = @{}
+            "return"        = [PSCustomObject][ordered]@{}
         }
-        $this.networkInterface = @{
+        $this.networkInterface = [PSCustomObject][ordered]@{
             "name"          = "$($name)NetworkInterface"
             "resourceGroup" = "$($name)ResourceGroup"
             "subnetName"    = "$($name)Subnet"
-            "return"        = @{}
+            "return"        = [PSCustomObject][ordered]@{}
         }
-        $this.vmDisk = @{
+        $this.vmDisk = [PSCustomObject][ordered]@{
             "name"          = "$($name)NetworkInterface"
-            "return"        = @{}
+            "return"        = [PSCustomObject][ordered]@{}
         }
         
     }
