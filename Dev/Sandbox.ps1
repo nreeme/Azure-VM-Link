@@ -14,14 +14,14 @@ class resource {
         $this.networkSecurityGroup = [PSCustomObject][ordered]@{
             "name"          = "$($name)Security"
             "resourceGroup" = $resourceName
-            "Return" = @{}
+            "Return"        = [PSCustomObject][ordered]@{}
         }
         $this.virtualNetwork = [PSCustomObject][ordered]@{ 
             "name"          = "$($name)Vnet" 
             "addressPrefix" = "$($IPSPACE)/16" 
             "subnetName"    = "Kronos2Subnet"
             "subnetPrefix"  = "$($IPSPACE)/24"
-            "return"        = @()
+            "return"        = [PSCustomObject][ordered]@{}
             "hiddenArg"     = $obsValue
         }
     }
@@ -32,10 +32,13 @@ class resource {
         $this.location = "EastUS2"
     }
 }
+
+
 ####Remote Data source
 $seedName = "Kronos2"    
-$location = "WestUS2"
+$location = "EastUS2"
 $NetworkAddrs = "10.0.0.0"
+$resourceName = $resource.resourceGroup.Name
 $resource = [resource]::new($seedName, $location, $NetworkAddrs, $resourceName, $null)
 ####
 
@@ -49,6 +52,10 @@ $resource.get_location()
 $resource.resourceGroup.return = az group create `
     --location $resource.location `
     --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 100  
+
+$resource.networkSecurityGroup.return = az network nsg create `
+    --resource-group $resource.resourceGroup.name `
+    --name $resource.networkSecurityGroup.name | ConvertFrom-Json -Depth 20
 
 $resource.virtualNetwork.return = az network vnet create `
     --location $resource.location `
