@@ -1,6 +1,6 @@
 ####Remote Data source
 $seedName = "Kronos2"    
-$location = "WestUS2"
+$location = "EastUS2"
 $NetworkAddrs = "10.0.0.0"
 ####
 
@@ -18,12 +18,12 @@ class resource {
         $this.tempWorkSpace = [PSCustomObject][ordered]@{"hiddenValue" = $obsValue }
         $this.location = $location
         $this.resourceGroup = [PSCustomObject][ordered]@{
-            "Name"   = "$($name)ResourceGroup"
+            "Name"   = "$($name)"
             "Return" = [PSCustomObject][ordered]@{}
         }
         $this.networkSecurityGroup = [PSCustomObject][ordered]@{
             "name"          = "$($name)Security"
-            "resourceGroup" = "$($name)ResourceGroup"
+            "resourceGroup" = "$($name)"
             "return"        = [PSCustomObject][ordered]@{}
         }
         $this.virtualNetwork = [PSCustomObject][ordered]@{ 
@@ -35,12 +35,12 @@ class resource {
         }
         $this.publicIP = [PSCustomObject][ordered]@{
             "name"          = "$($name)PublicIp"
-            "resourceGroup" = "$($name)ResourceGroup"
+            "resourceGroup" = "$($name)"
             "return"        = [PSCustomObject][ordered]@{}
         }
         $this.networkInterface = [PSCustomObject][ordered]@{
             "name"          = "$($name)NetworkInterface"
-            "resourceGroup" = "$($name)ResourceGroup"
+            "resourceGroup" = "$($name)"
             "subnetName"    = "$($name)Subnet"
             "return"        = [PSCustomObject][ordered]@{}
         }
@@ -75,7 +75,7 @@ $resource.networkSecurityGroup.return = az network nsg create `
 
 $resource.virtualNetwork.return = az network vnet create `
     --location $resource.location `
-    --resource-group $resource.resourceGroup.return.name `
+    --resource-group $resource.resourceGroup.name `
     --name $resource.virtualNetwork.name `
     --address-prefix $resource.virtualNetwork.addressPrefix `
     --subnet-name $resource.virtualNetwork.subnetName `
@@ -84,12 +84,16 @@ $resource.virtualNetwork.return = az network vnet create `
 $resource.publicIP.return = az network public-ip create `
     --name $resource.publicIP.name `
     --resource-group $resource.resourceGroup.name
-<#
+
 $resource.networkInterface.return = az network nic create `
     --name $resource.networkInterface `
-    --resource-group $resource.resourceGroup.return.name `
+    --resource-group $resource.resourceGroup.name `
     --subnet $resource.virtualNetwork.subnetName
 
 $resourceaz.diskcreate.return = az disk create `
     --name $resource..return.name | ConvertFrom-Json -Depth 20 `
-    --resource-group $resource.resourceGroup.return.name | ConvertFrom-Json -Depth 20 #>
+    --resource-group $resource.resourceGroup.return.name | ConvertFrom-Json -Depth 20 
+    
+    <#
+
+    #>
