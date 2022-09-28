@@ -45,8 +45,9 @@ class resource {
             "return"        = [PSCustomObject][ordered]@{}
         }
         $this.vmDisk = [PSCustomObject][ordered]@{
-            "name"          = "$($name)NetworkInterface"
-            "return"        = [PSCustomObject][ordered]@{}
+            "name"   = "$($name)VmDisk"
+            "size"   = "30"
+            "return" = [PSCustomObject][ordered]@{}
         }
         
     }
@@ -90,10 +91,11 @@ $resource.networkInterface.return = az network nic create `
     --resource-group $resource.resourceGroup.name `
     --subnet $resource.virtualNetwork.subnetName
 
-$resourceaz.diskcreate.return = az disk create `
-    --name $resource..return.name | ConvertFrom-Json -Depth 20 `
-    --resource-group $resource.resourceGroup.return.name | ConvertFrom-Json -Depth 20 
-    
-    <#
+$resource.vmDisk.return = az disk create `
+    --name $resource.vmDisk.name `
+    --resource-group $resource.resourceGroup.name `
+    --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20
+
+<#
 
     #>
