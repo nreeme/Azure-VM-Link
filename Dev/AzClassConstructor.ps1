@@ -13,6 +13,7 @@ class resource {
     [object]$publicIP
     [object]$networkInterface
     [object]$vmDisk
+    [object]$VirtualMachine
     hidden [object] $tempWorkSpace
     resource($name, $location, $IPSPACE, $obsValue) {
         $this.tempWorkSpace = [PSCustomObject][ordered]@{"hiddenValue" = $obsValue }
@@ -49,7 +50,11 @@ class resource {
             "size"   = "30"
             "return" = [PSCustomObject][ordered]@{}
         }
-        
+        $this.VirtualMachine = [PSCustomObject][ordered]@{
+            "name"   = "$($name)VirtualMachine"
+            "image" = "Canonical:UbuntuServer:18.04-LTS:latest"
+            "return" = [PSCustomObject][ordered]@{}
+        }
     }
     [string]get_location() {
         return $this.location
@@ -96,6 +101,12 @@ $resource.vmDisk.return = az disk create `
     --resource-group $resource.resourceGroup.name `
     --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20
 
-<#
+$resource.VirtualMachine.return = az vm create `
+    --name $resource.VirtualMachine.name `
+    --resource-group $resource.resourceGroup.name `
+    --generate-ssh-keys `
+    --image $resource.VirtualMachine.image | ConvertFrom-Json -Depth 20
 
+<#
+    
     #>
