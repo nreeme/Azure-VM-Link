@@ -70,7 +70,18 @@ $resource = [resource]::new($seedName, $location, $NetworkAddrs, $null)
 $resource.get_location()
 ####
 
+Write-host "Creating VM $($resource.VirtualMachine.name)"
+        $VM_Result = az vm create --name $resource.VirtualMachine.name `
+            --resource-group $resource.resourceGroup.name `
+            --location $resource.location `
+            --image $resource.VirtualMachine.image `
+            --size $resource.vmDisk.size `
+            #--nics "$($Create_NIC.NewNIC.id)" `
+            #--os-type "$($_.OSType)"
+            #--attach-os-disk "$OSDISK" `
+            #--availability-set "$Avail_Set" `
 
+<#
 $resource.resourceGroup.return = az group create `
     --location $resource.location `
     --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
@@ -107,6 +118,6 @@ $resource.VirtualMachine.return = az vm create `
     --generate-ssh-keys `
     --image $resource.VirtualMachine.image | ConvertFrom-Json -Depth 20
 
-<#
+
     
     #>
