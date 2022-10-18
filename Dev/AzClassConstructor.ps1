@@ -1,6 +1,6 @@
 ####Remote Data source
 $seedName = "Kronos2"    
-$location = "EastUS2"
+$location = "WestUS3"
 $NetworkAddrs = "10.0.0.0"
 ####
 
@@ -47,12 +47,12 @@ class resource {
         }
         $this.vmDisk = [PSCustomObject][ordered]@{
             "name"   = "$($name)VmDisk"
-            "size"   = "30"
+            "size"   = "Standard_D2s_v3"
             "return" = [PSCustomObject][ordered]@{}
         }
         $this.VirtualMachine = [PSCustomObject][ordered]@{
             "name"   = "$($name)VirtualMachine"
-            "image" = "Canonical:UbuntuServer:18.04-LTS:latest"
+            "image" = "Canonical:UbuntuServer:20_04-lts-gen2:latest"
             "return" = [PSCustomObject][ordered]@{}
         }
     }
@@ -70,6 +70,11 @@ $resource = [resource]::new($seedName, $location, $NetworkAddrs, $null)
 $resource.get_location()
 ####
 
+$resource.resourceGroup.return = az group create `
+    --location $resource.location `
+    --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
+
+    
 Write-host "Creating VM $($resource.VirtualMachine.name)"
         $VM_Result = az vm create --name $resource.VirtualMachine.name `
             --resource-group $resource.resourceGroup.name `
@@ -82,9 +87,6 @@ Write-host "Creating VM $($resource.VirtualMachine.name)"
             #--availability-set "$Avail_Set" `
 
 <#
-$resource.resourceGroup.return = az group create `
-    --location $resource.location `
-    --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
 
 $resource.networkSecurityGroup.return = az network nsg create `
     --resource-group $resource.resourceGroup.name `
