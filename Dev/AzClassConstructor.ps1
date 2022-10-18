@@ -52,7 +52,7 @@ class resource {
         }
         $this.VirtualMachine = [PSCustomObject][ordered]@{
             "name"   = "$($name)VirtualMachine"
-            "image" = "Canonical:UbuntuServer:20_04-lts-gen2:latest"
+            "image" = "Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest"
             "return" = [PSCustomObject][ordered]@{}
         }
     }
@@ -80,7 +80,7 @@ Write-host "Creating VM $($resource.VirtualMachine.name)"
             --resource-group $resource.resourceGroup.name `
             --location $resource.location `
             --image $resource.VirtualMachine.image `
-            --size $resource.vmDisk.size `
+            --size $resource.vmDisk.size 
             #--nics "$($Create_NIC.NewNIC.id)" `
             #--os-type "$($_.OSType)"
             #--attach-os-disk "$OSDISK" `
