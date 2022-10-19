@@ -47,12 +47,14 @@ class resource {
         }
         $this.vmDisk = [PSCustomObject][ordered]@{
             "name"   = "$($name)VmDisk"
-            "size"   = "Standard_D2s_v3"
+            "size"   = "30"
+            "sku"    = "Standard_SSD_LRS"
+            "osType" = "Linux"
             "return" = [PSCustomObject][ordered]@{}
         }
         $this.VirtualMachine = [PSCustomObject][ordered]@{
             "name"   = "$($name)VirtualMachine"
-            "image" = "Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest"
+            "image"  = "Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest"
             "return" = [PSCustomObject][ordered]@{}
         }
     }
@@ -70,21 +72,28 @@ $resource = [resource]::new($seedName, $location, $NetworkAddrs, $null)
 $resource.get_location()
 ####
 
-$resource.resourceGroup.return = az group create `
+Write-host "Creating RG $($resource.resourceGroup.return)" = az group create `
     --location $resource.location `
     --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
 
-    
-Write-host "Creating VM $($resource.VirtualMachine.name)"
-        $VM_Result = az vm create --name $resource.VirtualMachine.name `
-            --resource-group $resource.resourceGroup.name `
-            --location $resource.location `
-            --image $resource.VirtualMachine.image `
-            --size $resource.vmDisk.size 
-            #--nics "$($Create_NIC.NewNIC.id)" `
-            #--os-type "$($_.OSType)"
-            #--attach-os-disk "$OSDISK" `
-            #--availability-set "$Avail_Set" `
+Write-host "Creating VM Disk $($resource.vmDisk.return)" = az disk create `
+    --name $resource.vmDisk.name `
+    --resource-group $resource.resourceGroup.name `
+    --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20 `
+    --sku $resource.vmDisk.sku 
+
+Write-host "Creating VM $($resource.VirtualMachine.name)" = az vm create `
+    --name $resource.VirtualMachine.name `
+    --resource-group $resource.resourceGroup.name `
+    --location $resource.location `
+    --image $resource.VirtualMachine.image `
+    --size $resource.vmDisk.size `
+    --attach-os-disk $resource.vmDisk.return.id `
+    --os-type $resource.vmDisk.return.osType
+#--nics "$($Create_NIC.NewNIC.id)" `
+
+#
+#--availability-set "$Avail_Set" `
 
 <#
 
@@ -109,17 +118,10 @@ $resource.networkInterface.return = az network nic create `
     --resource-group $resource.resourceGroup.name `
     --subnet $resource.virtualNetwork.subnetName
 
-$resource.vmDisk.return = az disk create `
-    --name $resource.vmDisk.name `
-    --resource-group $resource.resourceGroup.name `
-    --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20
-
 $resource.VirtualMachine.return = az vm create `
     --name $resource.VirtualMachine.name `
     --resource-group $resource.resourceGroup.name `
     --generate-ssh-keys `
     --image $resource.VirtualMachine.image | ConvertFrom-Json -Depth 20
-
-
-    
+ 
     #>
