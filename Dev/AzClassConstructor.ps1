@@ -19,8 +19,8 @@ class resource {
         $this.tempWorkSpace = [PSCustomObject][ordered]@{"hiddenValue" = $obsValue }
         $this.location = $location
         $this.resourceGroup = [PSCustomObject][ordered]@{
-            "Name"   = "$($name)"
-            "Return" = [PSCustomObject][ordered]@{}
+            "name"   = "$($name)"
+            "return" = [PSCustomObject][ordered]@{}
         }
         $this.networkSecurityGroup = [PSCustomObject][ordered]@{
             "name"          = "$($name)Security"
@@ -48,7 +48,7 @@ class resource {
         $this.vmDisk = [PSCustomObject][ordered]@{
             "name"   = "$($name)VmDisk"
             "size"   = "30"
-            "sku"    = "Standard_SSD_LRS"
+            "sku"    = "StandardSSD_LRS"
             "osType" = "Linux"
             "return" = [PSCustomObject][ordered]@{}
         }
@@ -72,27 +72,26 @@ $resource = [resource]::new($seedName, $location, $NetworkAddrs, $null)
 $resource.get_location()
 ####
 
-Write-host "Creating RG $($resource.resourceGroup.return)" = az group create `
+$resource.resourceGroup.return = az group create `
     --location $resource.location `
     --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
 
-Write-host "Creating VM Disk $($resource.vmDisk.return)" = az disk create `
+$resource.vmDisk.return = az disk create `
     --name $resource.vmDisk.name `
     --resource-group $resource.resourceGroup.name `
-    --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20 `
-    --sku $resource.vmDisk.sku 
+    --sku $resource.vmDisk.sku `
+    --size-gb $resource.vmDisk.size | ConvertFrom-Json -Depth 20 
 
-Write-host "Creating VM $($resource.VirtualMachine.name)" = az vm create `
+$resource.VirtualMachine.return = az vm create `
     --name $resource.VirtualMachine.name `
     --resource-group $resource.resourceGroup.name `
     --location $resource.location `
-    --image $resource.VirtualMachine.image `
-    --size $resource.vmDisk.size `
-    --attach-os-disk $resource.vmDisk.return.id `
-    --os-type $resource.vmDisk.return.osType
+    --size $resource.vmDisk.sku `
+    --attach-os-disk $resource.vmDisk.name `
+    --os-type $resource.vmDisk.osType
 #--nics "$($Create_NIC.NewNIC.id)" `
 
-#
+#--image $resource.VirtualMachine.image `
 #--availability-set "$Avail_Set" `
 
 <#
