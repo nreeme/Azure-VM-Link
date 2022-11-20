@@ -20,7 +20,7 @@ class resource {
         $this.location = $location
         $this.resourceGroup = [PSCustomObject][ordered]@{
             "Name"   = "$($name)"
-            "Return" = [PSCustomObject][ordered]@{}
+            # "Return" = [PSCustomObject][ordered]@{}
         }
         $this.networkSecurityGroup = [PSCustomObject][ordered]@{
             "name"          = "$($name)Security"
@@ -52,12 +52,20 @@ class resource {
         }
         $this.VirtualMachine = [PSCustomObject][ordered]@{
             "name"   = "$($name)VirtualMachine"
-            "image" = "Canonical:UbuntuServer:18.04-LTS:latest"
+            "image"  = "Canonical:UbuntuServer:18.04-LTS:latest"
             "return" = [PSCustomObject][ordered]@{}
+        }
+        $this.return = @{
+            "resourcegroup" = $null
         }
     }
     [string]get_location() {
         return $this.location
+    }
+    [void] create_resourcegroup () {
+        $this.return.resourcegroup = az group create `
+            --location $this.location `
+            --name $this.resourceGroup.name | ConvertFrom-Json -Depth 20
     }
 }
 
@@ -71,9 +79,7 @@ $resource.get_location()
 ####
 
 
-$resource.resourceGroup.return = az group create `
-    --location $resource.location `
-    --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 20
+
 
 $resource.networkSecurityGroup.return = az network nsg create `
     --resource-group $resource.resourceGroup.name `
