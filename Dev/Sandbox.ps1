@@ -51,7 +51,7 @@ $resource.get_location()
 
 $resource.resourceGroup.return = az group create `
     --location $resource.location `
-    --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 100  
+    --name $resource.resourceGroup.name | ConvertFrom-Json -Depth 10
 
 $resource.networkSecurityGroup.return = az network nsg create `
     --resource-group $resource.resourceGroup.name `
