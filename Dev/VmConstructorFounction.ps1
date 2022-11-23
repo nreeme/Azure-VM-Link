@@ -1,12 +1,12 @@
 class ClassName {
     [string]$name
     [string]$location
-    [string]$resourceGroup
+    [object]$resourceGroup
     [string]$image
     [object]$return
     ClassName ($opt01, $opt02, $opt03) {
         $this.name = $opt01
-        $this.location = (if ($null -ne $opt02) { $opt02 } else { "EastUS2" } )
+        $this.location = if ($null -ne $opt02) {$opt02} else {"EastUS2"}
         $this.resourceGroup = @{
             "name" = $opt03
             "Return" = [PSCustomObject][ordered]@{}
@@ -24,11 +24,11 @@ class ClassName {
         #LOG IN
     }
     [Void] method01 () {
-        $this.resourcegroup = az group create `
-            --location $this.location `
-            --name $this.name | ConvertFrom-Json -Depth 20
+        $this.resourceGroup = az group create `
+            --name $this.name `
+            --location $this.location | ConvertFrom-Json -Depth 20
     }
-    [Void] method01 () {s
+    [Void] method02 () {s
         $this.return = az vm create `
             --resource-group $this.resourceGroup `
             --name $this.name  `
@@ -36,7 +36,7 @@ class ClassName {
             --admin-username $this.name `
             --generate-ssh-keys | ConvertFrom-Json -Depth 20
     }
-    [Void] method0 () {
+    [Void] method03 () {
         #LOG OUT
     }
 }
