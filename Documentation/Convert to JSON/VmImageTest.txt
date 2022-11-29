@@ -1,0 +1,11 @@
+{
+  "fqdns": "",
+  "id": "/subscriptions/782c5c20-e1f5-4b1f-981c-ea3179aefb13/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM",
+  "location": "westus3",
+  "macAddress": "60-45-BD-C8-47-A0",
+  "powerState": "VM running",
+  "privateIpAddress": "10.0.0.4",
+  "publicIpAddress": "20.171.47.209",
+  "resourceGroup": "myResourceGroup",
+  "zones": ""
+}
